@@ -1,0 +1,63 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # Specify the version you desire here
+      - image: circleci/php:7.4-node-browsers
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Prepare Environment"
+          command: |
+            sudo apt update
+            sudo docker-php-ext-install zip
+            sudo apt install python-pip
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: "Install Dependencies"
+          command: composer install -n --prefer-dist
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+      
+      - run:
+          name: "Create Environment file and generate app key"
+          command: |
+            touch .env
+            php artisan key:generate
+
+      # deploy!
+      - run:
+          name: deploy app
+          working_directory: ~/repo
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              sudo pip install awsebcli
+              mkdir ~/.aws
+              touch ~/.aws/config
+              chmod 600 ~/.aws/config
+              echo "[profile eb-cli]" > ~/.aws/config
+              echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/config
+              echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
+              eb deploy EarlybirdBackend-env --verbose --profile eb-cli
+            else
+              echo "No need to deploy"
+            fi

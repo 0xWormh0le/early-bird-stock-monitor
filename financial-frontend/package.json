@@ -1,0 +1,85 @@
+{
+  "name": "earlybird",
+  "description": "Earlybird",
+  "author": "Donnel",
+  "version": "0.9.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
+    "cross-env": "5.2.0",
+    "date-fns": "^1.30.1",
+    "electron-is-dev": "0.3.0",
+    "electron-log": "^2.2.6",
+    "emotion": "^10.0.27",
+    "formik": "^2.1.4",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.11",
+    "moment-timezone": "^0.5.31",
+    "react": "16.8.6",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "16.8.6",
+    "react-intl": "^4.6.9",
+    "react-redux": "^7.0.3",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-router-redux": "^4.0.8",
+    "react-spinners": "^0.5.4",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.5",
+    "redux-saga": "^1.0.2",
+    "reselect": "^4.0.0",
+    "update-electron-app": "^1.3.0",
+    "yup": "^0.29.1"
+  },
+  "devDependencies": {
+    "concurrently": "3.5.1",
+    "copyfiles": "^2.3.0",
+    "electron": "^9.0.4",
+    "electron-builder": "^22.7.0",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.4.4",
+    "react-scripts": "^3.0.1",
+    "sass-loader": "^7.1.0",
+    "wait-on": "2.1.0"
+  },
+  "build": {
+    "productName": "Earlybird",
+    "icon": "build/icon.png",
+    "publish": {
+      "provider": "github"
+    }
+  },
+  "main": "public/electron.js",
+  "homepage": "./",
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "electron-build-win": "yarn copy-icon && electron-builder",
+    "electron-build": "yarn copy-icon && yarn codesign && electron-builder -mwl",
+    "codesign": "codesign --deep --force --verbose --sign - ./node_modules/electron/dist/Electron.app",
+    "copy-icon": "copyfiles -f src/images/icon.png build && copyfiles -f src/images/icon.png build/icons",
+    "release": "yarn react-build && electron-builder --publish=never",
+    "build": "yarn react-build && yarn electron-build",
+    "build-win": "yarn react-build && yarn electron-build-win",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

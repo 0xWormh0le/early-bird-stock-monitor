@@ -1,0 +1,13 @@
+.Signup {
+  height: 100vh;
+  display: flex;
+
+  &__Form-container.col {
+    margin: auto;
+    max-width: 500px;
+  }
+
+  &__Logo {
+    max-width: 80px;
+  }
+}

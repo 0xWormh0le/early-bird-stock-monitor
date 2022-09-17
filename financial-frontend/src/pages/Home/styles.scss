@@ -1,0 +1,143 @@
+@import '../../styles/variables';
+
+@mixin table-padding {
+  &:first-child {
+    padding-left: 5em;
+  }
+
+  &:not(:first-child) {
+    text-align: right;
+  }
+
+  &:last-child {
+    padding-right: 5em;
+  }
+}
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+
+    &-track {
+      box-shadow: inset 0 0 6px #0000004d;
+      border: solid 3px transparent;
+      border-radius: 10px;
+      display: none;
+      background-color: transparent;
+    }
+
+    &-thumb {
+      box-shadow: inset 0 0 14px 14px #ffffff1a;
+      border: solid 7px transparent;
+      border-radius: 12px;
+      transition: all 1s ease;
+
+      &:hover {
+        box-shadow: inset 0 0 14px 14px #ffffff26;  
+      }
+    }
+
+    &-corner {
+      background-color: transparent;
+    }
+  }
+}
+
+.Home {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0 -1em;
+  
+  &__Stock-table {
+    thead tr th {
+      font-weight: inherit;
+      border-bottom: none;
+      border-top: none;
+      position: sticky;
+      top: 0;
+      background-color: #141828;
+      color: gray;
+
+      @include table-padding();
+    }
+
+    tbody {
+      tr:first-child td {
+        border-top: none;
+      }
+      
+      td {
+        color: #0ec18b;
+        vertical-align: middle;
+        border-top-color: #191d29;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 10em;
+        @include table-padding();
+        
+        &:first-child {
+          color: gray;
+        }
+      }
+    }
+  }
+
+  &__Stock-acronym {
+    color: white;
+    font-size: larger;
+    text-transform: uppercase;
+  }
+
+  &__Period {
+    &.btn {
+      background-color: #171c2c;
+      border-color: #171c2c;
+      width: 8em;
+    }
+    
+    &--active.btn {
+      width: 8em;
+      background-color: #0c2b40;
+      border-color: $primary;
+      color: $primary;
+    }
+  }
+
+  &__Stock-data {
+    overflow-y: auto;
+    @include scrollbar();
+  }
+
+  &__Avatar {
+    position: absolute;
+    text-transform: capitalize;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__Loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.WaitBox {
+  border-radius: 5px;
+  color: gray;
+  background-color: #141828;
+  position: fixed;
+  margin: 1em;
+  left: 0;
+  bottom: 0;
+
+  &__Title {
+    font-size: 1.3em;
+  }
+}
